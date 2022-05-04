@@ -1,4 +1,3 @@
-import { height } from "@mui/system";
 import { useState, useEffect } from "react";
 
 const FetchSearch = (props) => {
@@ -6,30 +5,40 @@ const FetchSearch = (props) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [users, setUsers] = useState({});
 
-
     useEffect(() => {
-        if (props.userLogin != '') {
-            fetch(`https://api.github.com/search/users?q=${props.userLogin}&per_page=${props.usersPerPage}&page=${props.page}`)
-                .then(res => res.json())
-                .then(
-                    (data) => {
-                        setIsLoaded(true);
-                        setUsers(data);
-                        props.onListLoaded(data.total_count);
-                    },
-                    (error) => {
-                        setIsLoaded(true);
-                        setError(error);
+        fetch(`https://api.github.com/search/users?q=${props.userLogin}&per_page=${props.usersPerPage}&page=${props.page}`)
+            .then(res => res.json())
+            .then(
+                (data) => {
+                    if(data.total_count !== undefined) {
+                    setIsLoaded(true);
+                    setUsers(data);
+                    props.onListLoaded(data.total_count);
                     }
-                )
+                    else {
+                        setIsLoaded(true);
+                        setError({message:data.message});
+                    }
+                },
+                (error) => {
+                    setIsLoaded(true);
+                    setError(error);
+                }
+            )
+        return function cleanup() {
+            setIsLoaded(false);
         }
     }, [props]);
-
 
     if (error) {
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
-        return <div>Loading...</div>;
+        return (
+            <div>
+                <div>
+                    Loading...
+                </div>
+            </div>);
     } else {
         return (
             <div>
@@ -43,12 +52,12 @@ const FetchSearch = (props) => {
                                 {user.login}
                             </div>
                             <div>
-                                <div style={{ 
-                                    backgroundImage: `url("${user.avatar_url}")`, 
+                                <div style={{
+                                    backgroundImage: `url("${user.avatar_url}")`,
                                     height: 100,
                                     width: 100,
                                     backgroundSize: 100
-                                    }} />
+                                }} />
                             </div>
                             <br /><br />
                         </div>
@@ -57,6 +66,6 @@ const FetchSearch = (props) => {
             </div>
         );
     }
-};
+}
 
 export default FetchSearch;

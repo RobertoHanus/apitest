@@ -5,7 +5,6 @@ import InputTerm from './components/InputTerm';
 import BottomPagination from './components/BottomPagination';
 
 import './App.css';
-import { BottomNavigation } from '@mui/material';
 
 function App() {
 
@@ -33,7 +32,7 @@ function App() {
         <InputTerm onInputSearchRequest={handleSearchRequest} />
       </div>
       <div>
-        <FetchSearch userLogin={searchTerm} page={page} onListLoaded={handleListLoaded} usersPerPage={usersPerPage}/>
+        <FetchSearch userLogin={searchTerm} page={page} onListLoaded={handleListLoaded} usersPerPage={usersPerPage}/> 
       </div>
       <div>
         <BottomPagination onPageChange={handlePageChange} pagesCount={pages} usersPerPage={usersPerPage} />
