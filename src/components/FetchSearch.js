@@ -23,8 +23,7 @@ const FetchSearch = (props) => {
                     }
                 )
         }
-    }
-        , [props]);
+    }, [props]);
 
 
     if (error) {
